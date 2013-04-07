@@ -7,6 +7,8 @@ their code into my source all over my page and it is esthetically irritating to 
 write one script that would load them all. And, hey, while I'm at it, why not give it a refresh. So that is what I 
 did. 
 
+It requires jQuery. But it could be easily ported to some other library (if you prefer)
+
 The cool thing is you can refresh the social buttons easily.
 
 Using Chrome you can type in socialBar in console (or the name of the instance)
