@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		function SocialBar ($obj, newUrl, newTitle) {
+			var url      = newUrl
+				, title    = newTitle
+				, $fb
+				, $twitter
+				, $li
+
+			function buildHTML() {
+				var html = ''
+				html += '<div>'
+				html += '	<span class="share-fb-wrap">'
+				html += '		<span class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-href="' + url + '"></span>'
+				html += '	</span>'
+
+				html += '	<span class="share-linkedIn-wrap">'
+				html += '		<scr' + 'ipt type="IN/Share" data-counter="right" data-url="' + url + '"></scr' + 'ipt>'
+				html += '	</span>'
+
+				html += '	<span class="share-twitter-wrap"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-url="' + url + '" data-via="docstoc" data-text="See what the Experts have to say">Tweet</a></span>'
+				html += '</div>'
+
+				$obj.html(html)
+			}
+
+			// assumes $(document).ready
+			function init() {
+				buildHTML()
+
+				// LINKED IN
+				$.getScript("//platform.linkedin.com/in.js", function() { })
+
+				// FACEBOOK
+				function fbDog(d, s, id, callback) {
+					var js, fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id)) return;
+					js = d.createElement(s); js.id = id;
+					js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+					fjs.parentNode.insertBefore(js, fjs);
+					typeof callback === "function" && callback()
+				} 
+
+				// TWITTER
+				;(function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = "//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } } (document, "script", "twitter-wjs"))
+
+				// FACEBOOK
+				fbDog(document, 'script', 'facebook-jssdk', function() {
+					$obj.delay(1000).fadeIn()
+				})
+
+				// fix for ie9 bug??
+				if ($.browser && $.browser.msie && $.browser.version) {
+					setTimeout(function() {
+						reloadFB()
+					}, 1000)
+				}
+			}
+
+			function instantiate() {
+				$fb      = $obj.find(".share-fb-wrap")
+				$twitter = $obj.find(".share-twitter-wrap")
+				$li      = $obj.find(".share-linkedIn-wrap")
+			}
+
+			function changeURL(newUrl, newTitle, callback) {
+				url = newUrl
+				title = newTitle
+				typeof callback === "function" && callback()
+			}
+
+			function reloadFB () {
+				instantiate()
+				if (typeof FB !== 'undefined') {
+					$fb.html('<div id="like" class="fb-like" data-href="' + url + '" data-send="false" data-layout="button_count" data-width="215" data-show-faces="false"></div>')
+					FB.XFBML.parse()
+				}
+			}
+
+			function reloadTwitter () {
+				if (typeof (twttr) !== "undefined") {
+					$twitter.html('<a href="https://twitter.com/share" class="twitter-share-button" data-url="' + url + '" data-via="Docstoc" data-related="Docstoc" data-text="' + title + '" >Tweet</a>')
+					twttr.widgets.load()
+				}
+			}
+
+			function reloadLinkedIn () {
+				if (typeof (IN) !== "undefined" && typeof (IN.parse) === "function") {
+					$li.html('<scr' + 'ipt type="IN/Share" data-counter="right" data-url="@ShareUrl"></scr' + 'ipt>')
+					IN.parse()
+				}
+			}
+
+			init()
+
+			return {
+				refreshAll : function(url, newTitle) {
+					changeURL(url, newTitle, function() {
+						reloadFB()
+						reloadTwitter()
+						reloadLinkedIn()
+					})
+				}
+			}
+		}
+			
+
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var socialBar = SocialBar($("#simpleSocialBar"), "http://www.yourUrl.com", "Your Title")
+		})
+	</script>
+
+	<style type="text/css">
+		/* [ Social Buttons */
+		#simpleSocialBarWrap { height:39px; position:relative; }
+		#simpleSocialBar { display:none; position:absolute; }
+		#simpleSocialBar .share-twitter-wrap,
+		#simpleSocialBar .share-linkedIn-wrap,
+		#simpleSocialBar .share-fb-wrap { margin-right:5px; display:block; float:left; min-width:60px; min-height:30px; }
+		#simpleSocialBar .share-twitter-wrap { overflow:hidden; }
+	</style>
+
+</head>
+<body>
+
+	<div id="simpleSocialBarWrap">
+		<div id="simpleSocialBar"></div>
+	</div>
+	
+</body>
+</html>
