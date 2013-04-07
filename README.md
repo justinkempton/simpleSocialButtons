@@ -7,7 +7,9 @@ their code into my source all over my page and it is esthetically irritating to 
 write one script that would load them all. And, hey, while I'm at it, why not give it a refresh. So that is what I 
 did. 
 
-It requires jQuery. But it could be easily ported to some other library (if you prefer)
+It requires jQuery. But it could be easily ported to some other library (if you prefer). 
+Also, needs to know the browser, for ie9. Current jQuery support for the browser object is depricated (but I still
+like it) and add it back to jquery. Not required, but for IE9 it will not behave nice.
 
 The cool thing is you can refresh the social buttons easily.
 
